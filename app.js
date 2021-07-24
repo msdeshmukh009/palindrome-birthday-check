@@ -1,108 +1,138 @@
 var bDate = document.querySelector("#date");
 var checkBtn = document.querySelector("#btn");
-var outputDiv = document.querySelector("output");
-var rem,temp,final = 0;
-var rem2,temp2,final2 =0;
-var rem3,temp3,final3 = 0;
-var rem4,temp4,final4 = 0;
-var rem5,temp5,final5 = 0;
+var outputMsgDiv = document.querySelector("#outputMsg");
+var loadingImg = document.querySelector("#loading")
+const datesInMonth=[31,28,31,30,31,30,31,31,30,31,30,31];
+const log = console.log;
 
-function moveInArray(arr,from,to){
-
-    var item = arr.splice(from,1);
-    arr.splice(to,0,item[0])
+function dateHandler(){
+    if(date){
+        loadingImg.style.display ="block"
+        setTimeout(()=>{
+            checkPalindrome();
+        }, 3000);
+    }
+    else{
+        outputMsgDiv.innerText("Please fill date field.")
+    }
 }
-function clicked(){
-    var dateArr = bDate.value.split("-");
-//yyyymmdd    
-    var yyyymmdd = dateArr.join("");
-    temp=yyyymmdd;
-    while(yyyymmdd>0){
-        rem = yyyymmdd%10;
-        yyyymmdd = parseInt(yyyymmdd/10);
-        final = final*10 + rem;
+function checkPalindrome(){
+    loadingImg.style.display ="none"
+    var bDateArr = bDate.value.split("-");
+    var inputYear = bDateArr[0];
+    var inputMonth = bDateArr[1];
+    var inputDate = bDateArr[2];
+    let cheked = checkAllCombi(inputYear,inputMonth,inputDate);
+
+    if(cheked){
+        outputMsgDiv.innerHTML="Whoa!!! Your birthdate in format",cheked, "is palindrome"
+    }else{
+        var [nextdate,diff]=findNextDate(inputYear,inputMonth,inputDate);
+        // outputMsgDiv.innerHTML="`Awww! Your birthdate is not palindrome. Nearest palindrome date is "
+        // +{nextdate}+ "You missed it by " +{diff}+ " days."
+        outputMsgDiv.innerHTML= `Awww! Your birthdate is not palindrome. Nearest palindrome date is ${nextdate} You missed it by ${diff} days.`;
     }
-    if(final==temp){
-        console.log("yyyymmdd:yup")
-    }
-//ddmmyyyy
-    moveInArray(dateArr,2,0);
-    moveInArray(dateArr,2,1);
-    var ddmmyyyy=dateArr.join("");
-    temp2=ddmmyyyy;
-    while(ddmmyyyy>0){
-        rem2 = ddmmyyyy%10;
-        ddmmyyyy = parseInt(ddmmyyyy/10);
-        final2 = final2*10 + rem2;
-    }
-    // console.log("ddmmyyyy "+final)
-    if(final2==temp2 && final!=temp){
-        console.log("ddmmyyyy:yup")
-    }
-//mmddyy
-    moveInArray(dateArr,1,0)
-    var mmddyyyy=dateArr.join("")
-    temp3 = mmddyyyy;
-    while(mmddyyyy>0){
-        rem3 = mmddyyyy%10;
-        mmddyyyy = parseInt(mmddyyyy/10);
-        final3 = final3*10 + rem3;
-    }
-    if(final3==temp3 && final2!=temp2 && final!=temp){
-        console.log("mmddyyyy:yup")
-    }
-   
-    //ddmmyy
-    moveInArray(dateArr,1,0)
-    var yy=  dateArr[2].split("");
-    yy.splice(0,1)
-    yy.splice(0,1)
-   var yyyy= dateArr.splice(2,1)
-    var ddmmyyArr = dateArr.concat(yy)
-    var ddmmyy = ddmmyyArr.join("");
-    temp4 = ddmmyy;
-    // console.log(ddmmyy)
-    while(ddmmyy>0){
-        rem4 = ddmmyy%10;
-        ddmmyy = parseInt(ddmmyy/10);
-        final4 = final4*10 + rem4;
-    }
-    if(final4==temp4&&final3!=temp3 && final2!=temp2 && final!=temp){
-        console.log("ddmmyy:yup")
-    }
-    //mddyy
-    var whole = dateArr.concat(yyyy) 
-    moveInArray(whole,1,0)//mmddyyyy
-    var m = whole[0].split("")
-    m.splice(0,1);
-    whole.splice(0,1);
-    var mddyyyyArr = whole.concat(m)//ddyyyym
-    moveInArray(mddyyyyArr,2,0)
-    var mddyyyy = mddyyyyArr.join("")
+}
+function checkAllCombi(yyyy,mm,dd){
+    //yyyymmdd
+    var dateFormat1 = yyyy+mm+dd;
+    // log(dateFormat1);
+    //ddmmyyyy 
+    var dateFormat2 = dd+mm+yyyy;
+    // log(dateFormat2);
+     //mmddyy 
+     var dateFormat3 = mm+dd+yyyy.substring(2);
+    //  log(dateFormat3);
+        
+     //mddyyyy 
+     var dateFormat4 = Number(mm)+dd+yyyy;
+    //  log(dateFormat4);
     
-    temp5=mddyyyy
-    while(mddyyyy>0){
-        rem5 = mddyyyy%10;
-        mddyyyy = parseInt(mddyyyy/10);
-        final5 = final5*10 + rem5;
+     if(isPalindrome(dateFormat1)){
+         return (yyyy-mm-dd);
+     }else if(isPalindrome(dateFormat2)){
+         return(dd-mm-yyyy);
+     }else if(isPalindrome(dateFormat3)){
+         return(mm-dd-yyyy.substring(2));
+     }else if(isPalindrome(dateFormat4)){
+         return(Number(mm)-dd-yyyy);
+     }else{
+         return null;
+     }
+}
+function isPalindrome(combistring){
+var mid = parseInt(combistring/2);
+for(var i =0;i<mid;i++){
+    if(combistring[i]!=combistring[combistring.length-1-i])
+    return false;
     }
-    if(final5==temp5&&final4!=temp4&&final3!=temp3 && final2!=temp2 && final!=temp){
-        console.log("mddyyyy:yup")
+    return true; 
+}
+function findNextDate(date,month,year){
+    var ddNo1 = Number(date);
+    var mmNo1 = Number(month);
+    var yyNo1 = Number(year);
+    let ddNo2= Number(date);
+    let mmNo2= Number(month);
+    let yyNo2=Number(year);
+    
+    for(var i=1;i>0;i++){
+
+        //forward check
+        ddNo1=ddNo1+1;
+        if(ddNo1>datesInMonth[mmNo1-1]){
+            ddNo1=1
+            mmNo1=mmNo1+1
+            if(mmNo1>12){
+                mmNo1=1;
+                yyNo1=yyNo1+1;
+            }
+        }
+    var yystring = yyNo1.toString();
+    var mmString = mmNo1.toString();
+    var ddString = ddNo1.toString();
+
+    if(mmString.length==1){
+        mmString="0"+mmString;
+    }
+    if(ddString.length==1){
+        ddString="0"+ddString;
+    }
+    var dateFound = checkAllCombi(yystring,mmString,ddString)
+    if(dateFound){
+        return[dateFound,i]
+    }
+
+      //backward check
+      if(yyNo2>1){
+        ddNo2 = ddNo2-1;
+        if(ddNo2<1){
+            mmNo2 = mmNo2-1;
+            if(mmNo2 < 1){
+                mmNo2 = 12;
+                yyNo2 = yyNo2-1;
+                if(yyNo2<1){
+                    break;
+                }
+                ddNo2 = datesInMonth[mmNo2-1];
+            }
+        }
+        let yyString = yyNo2.toString();
+        let mmString = mmNo2.toString();
+        let ddString = ddNo2.toString();
+        if(mmString.length==1){
+            mmString="0"+mmString;
+        }
+        if(ddString.length==1){
+            ddString="0"+ddString;
+        }
+        let dateFound = checkAllCombi(yyString, mmString, ddString);
+        if(dateFound){
+            return [dateFound, i];
+        }
+    }
+
     }
     
-    //final no
-    if(final!=temp&&final2!=temp2&&final3!=temp3&&final4!=temp4&&final5!=temp5){
-        console.log("nope")
-    }
-
- clear()
 }
-
-checkBtn.addEventListener("click",clicked)
-function clear(){
-     bDate.value=null;
-     rem2,temp2,final2 =0;
-     rem3,temp3,final3 = 0;
-     rem4,temp4,final4 = 0;
-     rem5,temp5,final5 = 0;
-}
+checkBtn.addEventListener("click",dateHandler)
