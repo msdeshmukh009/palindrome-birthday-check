@@ -4,16 +4,20 @@ var outputMsgDiv = document.querySelector("#outputMsg");
 var loadingImg = document.querySelector("#loading")
 const datesInMonth=[31,28,31,30,31,30,31,31,30,31,30,31];
 const log = console.log;
-
+function clearmsg(){
+    outputMsgDiv.innerText="";
+}
 function dateHandler(){
-    if(date){
+    clearmsg()
+    if(date.value!=""){
+        log(date.value)
         loadingImg.style.display ="block"
         setTimeout(()=>{
             checkPalindrome();
         }, 3000);
     }
-    else{
-        outputMsgDiv.innerText("Please fill date field.")
+    else {
+        outputMsgDiv.innerText="Please fill date field."
     }
 }
 function checkPalindrome(){
