@@ -1,3 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
+:root{
+    --back-color:#FF6B6B;
+    /* --back-color:#1E0645; */
+    --font-color:#FDD2BF;
+    --head-color:#FFE459;
+}
+
 #loading{
     display: none;
+}
+body{
+    margin: 0;
+    background-color: var(--back-color);
+    font-family: 'Oswald', sans-serif;
+    color: var(--font-color);
+}
+main{
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+}
+hr{
+    border: var(--head-color) dotted 6px;
+    width: 4rem;
+    margin:1rem auto;
+    border-bottom:none ;
+}
+.subhead{
+    margin-block-start: 0;
+}
+span{
+    color: var(--head-color);
+}
+.intructions{
+   max-width: 75%;
+   margin: auto;
+   font-size: 1rem;
+   /* border: solid;  */
+}
+input{
+    display: block;
+    margin: auto;
+}
+#loading{
+    /* max-height: 10%; */
+    width: 5rem;
+    margin: auto;
+    border-radius: 50%;
+}
+
+h1{
+    margin-block-start: 0;
+    line-height: 3.6rem;
+    margin-bottom: 0rem;
+    font-size: 2.6rem;
+}
+h2{
+    font-size: 1.5rem;
+    line-height: 3rem;
+    margin-bottom: 0rem;
+}
+#outputMsg{
+    width: 75%;
+    margin: auto;
+    margin-bottom: 0.75rem; ;
+    border: solid var(--head-color);
+    display: none;
+    padding: 0.75rem;
+}
+input{
+    display: block;
+    margin: auto;
+    margin-bottom: 0.5rem;
+    margin-top:0.5rem ;
+    height: 2.5rem;
+    width: 12.5rem;
+    border: solid var(--font-color) 0.2rem;
+    border-radius: 1rem ;
+    font-size: 1rem; 
+    color: black;
+}
+#btn{
+    background-color: var(--font-color);
+    color:var(--back-color);
+    border-width: medium;
+    padding: 0.5rem;
+    border-color: var(--font-color);
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+/* footer */
+.footer {
+    
+    padding: 4.5rem 1rem;
+    background-color: var(--primary-color);
+    border-top-right-radius: 1rem;
+    color: var(--yellow);
+    text-align: center;
+}
+
+.footer-heading {
+    font-weight: bold;
+    font-size: large;
+}
+.footer ul {
+    padding-inline-start: 0px;
+}
+.footer-link {
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    margin:0.5rem 1rem ;
+}
+/* lists */
+.list-non-bullet {
+    list-style: none;
+    padding-inline-start: 0px;
+}
+
+.list-item-inline {
+    display: inline;
+    margin: 0rem 0.5rem;
 }

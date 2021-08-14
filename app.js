@@ -6,6 +6,7 @@ const datesInMonth=[31,28,31,30,31,30,31,31,30,31,30,31];
 const log = console.log;
 function clearmsg(){
     outputMsgDiv.innerText="";
+    outputMsgDiv.style.display ="none"
 }
 function dateHandler(){
     clearmsg()
@@ -17,6 +18,7 @@ function dateHandler(){
         }, 3000);
     }
     else {
+        outputMsgDiv.style.display ="block"
         outputMsgDiv.innerText="Please fill date field."
     }
 }
@@ -29,10 +31,12 @@ function checkPalindrome(){
    var cheked = checkAllCombi(inputYear,inputMonth,inputDate);
 
     if(cheked){
-        outputMsgDiv.innerText="Whoa!!! Your birthdate in format "+cheked+" is palindrome"
+        outputMsgDiv.style.display ="block"
+        outputMsgDiv.innerText="Guess what!! Your birthdate in format "+cheked+" is palindrome"
     }else{
         var [nextdate,diff]=findNextDate(inputDate,inputMonth,inputYear);
-        outputMsgDiv.innerText="`Awww! Your birthdate is not palindrome. Nearest palindrome date is "
+        outputMsgDiv.style.display ="block"
+        outputMsgDiv.innerText="Your birthdate is not palindrome. Nearest palindrome date is "
         +nextdate+ "You missed it by " +diff+ " days."
         
     }
