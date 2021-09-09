@@ -6,9 +6,6 @@
     --head-color:#FFE459;
 }
 
-#loading{
-    display: none;
-}
 body{
     margin: 0;
     background-color: var(--back-color);
@@ -44,7 +41,7 @@ input{
     margin: auto;
 }
 #loading{
-    /* max-height: 10%; */
+    display: none;
     width: 5rem;
     margin: auto;
     border-radius: 50%;

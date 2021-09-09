@@ -10,7 +10,7 @@ function clearmsg(){
 }
 function dateHandler(){
     clearmsg()
-    if(date.value!=""){
+    if(bDate.value!=""){
         log(date.value)
         loadingImg.style.display ="block"
         setTimeout(()=>{
