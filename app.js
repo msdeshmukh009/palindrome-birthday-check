@@ -1,8 +1,9 @@
 var bDate = document.querySelector("#date");
 var checkBtn = document.querySelector("#btn");
 var outputMsgDiv = document.querySelector("#outputMsg");
-var loadingImg = document.querySelector("#loading")
-const datesInMonth=[31,28,31,30,31,30,31,31,30,31,30,31];
+var loadingImg = document.querySelector("#loading");
+const daysInMonths=[31,28,31,30,31,30,31,31,30,31,30,31];
+const daysInMonthsLeap = [31,29,31,30,31,30,31,31,30,31,30,31];
 const log = console.log;
 function clearmsg(){
     outputMsgDiv.innerText="";
@@ -11,7 +12,7 @@ function clearmsg(){
 function dateHandler(){
     clearmsg()
     if(bDate.value!=""){
-        log(date.value)
+        //log(date.value)
         loadingImg.style.display ="block"
         setTimeout(()=>{
             checkPalindrome();
@@ -34,7 +35,7 @@ function checkPalindrome(){
         outputMsgDiv.style.display ="block"
         outputMsgDiv.innerText="Guess what!! Your birthdate in format "+cheked+" is palindrome"
     }else{
-        var [nextdate,diff]=findNextDate(inputDate,inputMonth,inputYear);
+        var [nextdate,diff]=nearestDate(inputDate,inputMonth,inputYear);
         outputMsgDiv.style.display ="block"
         outputMsgDiv.innerText="Your birthdate is not palindrome. Nearest palindrome date is "
         +nextdate+ "You missed it by " +diff+ " days."
@@ -52,20 +53,20 @@ function checkAllCombi(yyyy,mm,dd){
      var dateFormat3 = mm+dd+yyyy.substring(2);
     
         
-     //mddyyyy 
-     var dateFormat4 = Number(mm)+dd+yyyy;
+     //mmddyyyy 
+     var dateFormat4 = mm+dd+yyyy;
     
     
      if(isPalindrome(dateFormat1)){
-            return (yyyy+"-"+mm+"-"+dd+" (yyyy-mm-dd)");
+            return (`${yyyy}-${mm}-${dd}(yyyy-mm-dd)`);
      }else if(isPalindrome(dateFormat2)){
-            return(dd+"-"+mm+"-"+yyyy+"(dd-mm-yyyy)");
+            return(`${dd}-${mm}-${yyyy}(dd-mm-yyyy)`);
      }else if(isPalindrome(dateFormat3)){
-         return(mm+"-"+dd+"-"+yyyy.substring(2)+"(mm-dd-yy)");
+         return(`${mm}-${dd}-${yyyy.substring(2)}(mm-dd-yy)`);
      }else if(isPalindrome(dateFormat4)){
-         return(Number(mm)+"-"+dd+"-"+yyyy+"(m-dd-yyyy)");
+         return(`${mm}-${dd}-${yyyy}(mm-dd-yyyy)`);
      }else{
-         return null;
+         return false;
      }
 }
 function isPalindrome(combistring){
@@ -76,74 +77,150 @@ for(var i =0;i<mid;i++){
     }
     return true; 
 }
-function findNextDate(date,month,year){
-    var ddNo1 = Number(date);
-    var mmNo1 = Number(month);
-    var yyNo1 = Number(year);
-   var ddNo2= Number(date);
-   var mmNo2= Number(month);
-   var yyNo2=Number(year);
- 
-    for(var i=1;i>0;i++){
+//funtion to check leap year
+function isLeapYear(year) {
+    return ((year%4 === 0) && (year%100 !== 0) || (year%400 === 0)) ;
+}
+//functions to find nearest palindrome date
+function forwardNextDate(date,month,year) {
+    let yearForward = Number.parseInt(year);
+    let monthForward = Number.parseInt(month);
+    let dateForward = Number.parseInt(date);
+    let diff = 0;
+    let found = false;
 
-        //forward check
-        ddNo1=ddNo1+1;
-        if(ddNo1>datesInMonth[mmNo1-1]){
-            ddNo1=1
-            mmNo1=mmNo1+1
-            if(mmNo1>12){
-                mmNo1=1;
-                yyNo1=yyNo1+1;
+    while(!found) {
+        dateForward++;
+        if(isLeapYear(yearForward)) {
+            if(dateForward > daysInMonthsLeap[monthForward-1]) {
+                dateForward = 1;
+                monthForward++;
             }
         }
-    var yystring = yyNo1.toString();
-    var mmString = mmNo1.toString();
-    var ddString = ddNo1.toString();
+        else {
+            if(dateForward > daysInMonths[monthForward-1]){
+                dateForward = 1;
+                monthForward++;
+            }
+        }
 
-    if(mmString.length==1){
-        mmString="0"+mmString;
-    }
-    if(ddString.length==1){
-        ddString="0"+ddString;
-    }
-    var dateFound = checkAllCombi(yystring,mmString,ddString)
-    
-    if(dateFound){
-        log(dateFound)
-        return ([dateFound,i])
-    }
-    
+        if(monthForward > 12) {
+            monthForward = 1;
+            yearForward = yearForward + 1;
+        }
 
-      //backward check
-      if(yyNo2>1){
-        ddNo2 = ddNo2-1;
-        if(ddNo2<1){
-            mmNo2 = mmNo2-1;
-            if(mmNo2 < 1){
-                mmNo2 = 12;
-                yyNo2 = yyNo2-1;
-                if(yyNo2<1){
-                    break;
+        if(yearForward > 9999) break;
+
+        let dateString = dateForward.toString();
+        let yearString = yearForward.toString();
+        let monthString = monthForward.toString();
+
+        if(dateString.length === 1) dateString = "0"+dateString;
+        if(monthString.length === 1) monthString = "0"+ monthString;
+
+        if(yearString.length < 4) {
+            if(yearString.length===0) {
+                yearString = "0000";
+            }
+            else if(yearString.length === 1) {
+                yearString = "000" + yearString;
+            }
+            else if(yearString.length === 2 ) {
+                yearString = "00" + yearString;
+            }
+            else if(yearString.length === 3){
+                yearString = "0" + yearString;
+            }
+        }
+
+        diff++;
+
+       var nearestPalindromeDate = checkAllCombi(yearString,monthString,dateString);
+        if(nearestPalindromeDate!== false) {
+            found = true;
+            //log("Nearest forward", nearestPalindromeDate);
+            break;
+        }
+    }    
+    return [nearestPalindromeDate, diff];
+}
+
+function backwardNextDate(date,month,year){
+    let yearBackward = Number.parseInt(year);
+    let monthBackward = Number.parseInt(month);
+    let dateBackward = Number.parseInt(date);
+    let diff = 0;
+
+    let found = false;
+    while(!found) {
+
+        if(yearBackward >= 1) {
+            dateBackward--;
+            if(dateBackward < 1){
+                monthBackward = monthBackward - 1;
+
+                if(monthBackward < 1) {
+                    monthBackward = 12;
+                    yearBackward = yearBackward - 1;
+                    if(yearBackward < 1) {
+                        break;
+                    }
                 }
-                ddNo2 = datesInMonth[mmNo2-1];
+                if(isLeapYear(yearBackward)) {
+                        dateBackward = daysInMonthsLeap[monthBackward-1];
+                }
+                else {
+                        dateBackward  = daysInMonths[monthBackward-1];
+                    }
             }
         }
-       var yyString = yyNo2.toString();
-       var mmString = mmNo2.toString();
-       var ddString = ddNo2.toString();
-        if(mmString.length==1){
-            mmString="0"+mmString;
+        else {
+            break;
         }
-        if(ddString.length==1){
-            ddString="0"+ddString;
-        }
-       var dateFound = checkAllCombi(yyString, mmString, ddString);
-        if(dateFound){
-            return ([dateFound, i]);
-        }
-    }
-
-    }
     
+        let dateString = dateBackward.toString();
+        let yearString = yearBackward.toString();
+        let monthString = monthBackward.toString();
+
+        if(yearString.length < 4) {
+            if(yearString.length === 1) {
+                yearString = "000" + yearString;
+            }
+            else if(yearString.length === 2 ) {
+                yearString = "00" + yearString;
+            }
+            else if(yearString.length === 3){
+                yearString = "0" + yearString;
+            }
+        }
+
+        if(dateString.length === 1) dateString = "0"+dateString;
+        if(monthString.length === 1) monthString = "0"+ monthString;
+        diff++;
+
+       var nearestPalindromeDate = checkAllCombi(yearString,monthString,dateString);
+        if(nearestPalindromeDate!== false) {
+            found = true;
+            //log("Nearest Backward", nearestPalindromeDate);
+            break;
+        }
+    }    
+    return [nearestPalindromeDate, diff];
+}
+function nearestDate(date,month,year){
+        let forwardDate = forwardNextDate(date,month,year);
+        let bcakwardDate = backwardNextDate(date,month,year);
+        let nearestDate = "";
+        let diff = "";
+        if(forwardDate[0]!=="" && bcakwardDate[0]!==""){
+            if(forwardDate[1]<bcakwardDate[1]){
+                nearestDate=forwardDate[0];
+                diff=forwardDate[1];
+            }else{
+                nearestDate=bcakwardDate[0];
+                diff=bcakwardDate[1]; 
+            }
+        }
+        return[nearestDate,diff]
 }
 checkBtn.addEventListener("click",dateHandler)
