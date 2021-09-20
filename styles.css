@@ -12,6 +12,7 @@ body{
     font-family: 'Oswald', sans-serif;
     color: var(--font-color);
 }
+
 main{
     text-align: center;
     width: 100%;
@@ -31,10 +32,10 @@ span{
     color: var(--head-color);
 }
 .intructions{
-   max-width: 75%;
+    padding: 00.75rem;
+   max-width: 100%;
    margin: auto;
    font-size: 1rem;
-   /* border: solid;  */
 }
 input{
     display: block;
@@ -59,7 +60,7 @@ h2{
     margin-bottom: 0rem;
 }
 #outputMsg{
-    width: 75%;
+    width: 80%;
     margin: auto;
     margin-bottom: 0.75rem; ;
     border: solid var(--head-color);
