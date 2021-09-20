@@ -33,7 +33,7 @@ function checkPalindrome(){
 
     if(cheked){
         outputMsgDiv.style.display ="block"
-        outputMsgDiv.innerText="Guess what!! Your birthdate in format "+cheked+" is palindrome"
+        outputMsgDiv.innerText="Guess what!! Your birthdate "+cheked+" is palindrome"
     }else{
         var [nextdate,diff]=nearestDate(inputDate,inputMonth,inputYear);
         outputMsgDiv.style.display ="block"
@@ -45,27 +45,26 @@ function checkPalindrome(){
 function checkAllCombi(yyyy,mm,dd){
     //yyyymmdd
     var dateFormat1 = yyyy+mm+dd;
-
     //ddmmyyyy 
     var dateFormat2 = dd+mm+yyyy;
-
      //mmddyy 
      var dateFormat3 = mm+dd+yyyy.substring(2);
-    
-        
      //mmddyyyy 
      var dateFormat4 = mm+dd+yyyy;
-    
+    //ddmmyy
+    var dateFormat5 = dd+mm+yyyy.substring(2);
     
      if(isPalindrome(dateFormat1)){
-            return (`${yyyy}-${mm}-${dd}(yyyy-mm-dd)`);
+            return (`${yyyy}-${mm}-${dd} in format yyyy-mm-dd `);
      }else if(isPalindrome(dateFormat2)){
-            return(`${dd}-${mm}-${yyyy}(dd-mm-yyyy)`);
+            return(`${dd}-${mm}-${yyyy} in format dd-mm-yyyy `);
      }else if(isPalindrome(dateFormat3)){
-         return(`${mm}-${dd}-${yyyy.substring(2)}(mm-dd-yy)`);
+         return(`${mm}-${dd}-${yyyy.substring(2)} in format mm-dd-yy `);
      }else if(isPalindrome(dateFormat4)){
-         return(`${mm}-${dd}-${yyyy}(mm-dd-yyyy)`);
-     }else{
+         return(`${mm}-${dd}-${yyyy} in format mm-dd-yyyy `);
+     }else if(isPalindrome(dateFormat5)){
+        return(`${dd}-${mm}-${yyyy.substring(2)} in format dd-mm-yy `);
+    }else{
          return false;
      }
 }
